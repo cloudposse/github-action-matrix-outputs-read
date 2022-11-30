@@ -77,13 +77,13 @@ jobs:
 
       - uses: nick-fields/assert-action@v1
         with:
-          expected: 'one'
-          actual: ${{ fromJson(needs.test.outputs.result2).result.one }}
+          expected: 'three'
+          actual: ${{ fromJson(needs.test.outputs.result2).result.three }}
 
       - uses: nick-fields/assert-action@v1
         with:
-          expected: 'two'
-          actual: ${{ fromJson(needs.test.outputs.result2).result.two }}
+          expected: 'four'
+          actual: ${{ fromJson(needs.test.outputs.result2).result.four }}
 
   teardown:
     runs-on: ubuntu-latest
