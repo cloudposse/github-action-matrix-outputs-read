@@ -1,8 +1,8 @@
-name: 'Example composite GitHub action'
-description: 'Example composite GitHub action'
+name: 'Matrix outputs read'
+description: 'Read outputs for matrix'
 author: hello@cloudposse.com
 branding:
-  icon: 'file'
+  icon: 'chevrons-down'
   color: 'white'
 inputs:
   matrix-step-name:
