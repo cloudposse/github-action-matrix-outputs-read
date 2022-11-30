@@ -8,6 +8,9 @@ on:
       matrix-key:
         required: false
         type: string
+      in:
+        required: true
+        type: string
     outputs:
       result:
         description: "Result"
@@ -29,7 +32,7 @@ jobs:
           matrix-step-name: ${{ inputs.matrix-step-name }}
           matrix-key: ${{ inputs.matrix-key }}
           outputs: |-
-            result: ${{ inputs.matrix-key }}
+            result: ${{ inputs.in }}
 
     outputs:
       result: ${{ inputs.matrix-key }}

@@ -1,22 +1,17 @@
-name: Test reusable workflow
+name: Test reusable workflow without matrix
 on:
 #  # Uncomment when test added first time to register workflow and comment it back after workflow would be registered
 #  #
 #  # Added pull_request to register workflow from the PR.
 #  # Read more https://stackoverflow.com/questions/63362126/github-actions-how-to-run-a-workflow-created-on-a-non-master-branch-from-the-wo
-#  pull_request: {}
+  pull_request: {}
   workflow_dispatch: {}
 
 jobs:
   setup:
     uses: cloudposse/github-action-matrix-outputs-read/.github/workflows/setup-test.yml@init
-    strategy:
-      matrix:
-        target: ["one", "two"]
     with:
-      matrix-step-name: setup
-      matrix-key: ${{ matrix.target }}
-      in: ${{ matrix.target }}
+      in: one
 
   test:
     runs-on: ubuntu-latest
@@ -26,13 +21,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ./
-        id: current
-        with:
-          matrix-step-name: setup
-
     outputs:
-      result: "${{ steps.current.outputs.result }}"
+      result: "${{ needs.setup.outputs.result }}"
 
   assert:
     runs-on: ubuntu-latest
@@ -40,18 +30,13 @@ jobs:
     steps:
       - uses: nick-fields/assert-action@v1
         with:
-          expected: '{"result":{"one":"one","two":"two"}}'
+          expected: '{"result":"one"}'
           actual: "${{ needs.test.outputs.result }}"
 
       - uses: nick-fields/assert-action@v1
         with:
           expected: 'one'
-          actual: ${{ fromJson(needs.test.outputs.result).result.one }}
-
-      - uses: nick-fields/assert-action@v1
-        with:
-          expected: 'two'
-          actual: ${{ fromJson(needs.test.outputs.result).result.two }}
+          actual: ${{ fromJson(needs.test.outputs.result).result }}
 
   teardown:
     runs-on: ubuntu-latest
