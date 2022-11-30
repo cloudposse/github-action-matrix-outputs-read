@@ -1,4 +1,4 @@
-name: Test example positive
+name: Test reusable workflow without matrix
 on:
 #  # Uncomment when test added first time to register workflow and comment it back after workflow would be registered
 #  #
@@ -9,23 +9,9 @@ on:
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target: ["one", "two"]
-    steps:
-      - name: Setup
-        run: echo "Do setup"
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - uses: cloudposse/github-action-matrix-outputs-write@0.1.0
-        with:
-          matrix-step-name: ${{ github.job }}
-          matrix-key: ${{ matrix.target }}
-          outputs: |-
-            result: ${{ matrix.target }}
+    uses: ./.github/workflows/setup-test.yml
+    with:
+      in: one
 
   test:
     runs-on: ubuntu-latest
@@ -35,13 +21,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ./
-        id: current
-        with:
-          matrix-step-name: setup
-
     outputs:
-      result: "${{ steps.current.outputs.result }}"
+      result: "${{ needs.setup.outputs.result }}"
 
   assert:
     runs-on: ubuntu-latest
@@ -49,18 +30,13 @@ jobs:
     steps:
       - uses: nick-fields/assert-action@v1
         with:
-          expected: '{"result":{"one":"one","two":"two"}}'
+          expected: '{"result":"one"}'
           actual: "${{ needs.test.outputs.result }}"
 
       - uses: nick-fields/assert-action@v1
         with:
           expected: 'one'
-          actual: ${{ fromJson(needs.test.outputs.result).result.one }}
-
-      - uses: nick-fields/assert-action@v1
-        with:
-          expected: 'two'
-          actual: ${{ fromJson(needs.test.outputs.result).result.two }}
+          actual: ${{ fromJson(needs.test.outputs.result).result }}
 
   teardown:
     runs-on: ubuntu-latest

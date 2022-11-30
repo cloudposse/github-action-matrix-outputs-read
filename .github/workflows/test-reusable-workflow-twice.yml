@@ -1,0 +1,94 @@
+name: Test twice reusable workflow
+on:
+#  # Uncomment when test added first time to register workflow and comment it back after workflow would be registered
+#  #
+#  # Added pull_request to register workflow from the PR.
+#  # Read more https://stackoverflow.com/questions/63362126/github-actions-how-to-run-a-workflow-created-on-a-non-master-branch-from-the-wo
+#  pull_request: {}
+  workflow_dispatch: {}
+
+jobs:
+  setup:
+    uses: ./.github/workflows/setup-test.yml
+    strategy:
+      matrix:
+        target: ["one", "two"]
+    with:
+      matrix-step-name: setup
+      matrix-key: ${{ matrix.target }}
+      in: ${{ matrix.target }}
+
+  setup2:
+    uses: ./.github/workflows/setup-test.yml
+    strategy:
+      matrix:
+        target: ["three", "four"]
+    with:
+      matrix-step-name: setup2
+      matrix-key: ${{ matrix.target }}
+      in: ${{ matrix.target }}
+
+  test:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [setup, setup2]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./
+        id: current1
+        with:
+          matrix-step-name: setup
+
+      - uses: ./
+        id: current2
+        with:
+          matrix-step-name: setup2
+
+
+    outputs:
+      result1: "${{ steps.current1.outputs.result }}"
+      result2: "${{ steps.current2.outputs.result }}"
+
+  assert:
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: '{"result":{"one":"one","two":"two"}}'
+          actual: "${{ needs.test.outputs.result1 }}"
+
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: 'one'
+          actual: ${{ fromJson(needs.test.outputs.result1).result.one }}
+
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: 'two'
+          actual: ${{ fromJson(needs.test.outputs.result1).result.two }}
+
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: '{"result":{"three":"three","four":"four"}}'
+          actual: "${{ needs.test.outputs.result2 }}"
+
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: 'three'
+          actual: ${{ fromJson(needs.test.outputs.result2).result.three }}
+
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: 'four'
+          actual: ${{ fromJson(needs.test.outputs.result2).result.four }}
+
+  teardown:
+    runs-on: ubuntu-latest
+    needs: [assert]
+    if: ${{ always() }}
+    steps:
+      - name: Tear down
+        run: echo "Do Tear down"

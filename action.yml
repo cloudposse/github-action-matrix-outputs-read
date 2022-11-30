@@ -1,23 +1,30 @@
-name: 'Example composite GitHub action'
-description: 'Example composite GitHub action'
+name: 'Matrix outputs read'
+description: 'Read outputs for matrix'
 author: hello@cloudposse.com
 branding:
-  icon: 'file'
+  icon: 'chevrons-down'
   color: 'white'
 inputs:
-  param1:
+  matrix-step-name:
     required: true
-    description: "Input parameter placeholder"
-    default: "true"
+    description: "Matrix step name"
 outputs:
-  result1:
-    description: "Output result placeholder"
-    value: "${{ steps.context.outputs.action-result }}"
+  result:
+    description: "Outputs result"
+    value: "${{ steps.context.outputs.result }}"
 runs:
   using: "composite"
   steps:
+    - name: 'Setup jq'
+      uses: dcarbone/install-jq-action@v1.0.0
+      with:
+        version: 1.6
+        force: 'true'
+
+    - uses: actions/download-artifact@v3
+
     - id: context
       shell: bash
       run: |
-          echo "::set-output name=action-result::${{ inputs.param1 }}"
-
+        result="$(find . -name ${{ inputs.matrix-step-name }} -maxdepth 2 -exec cat {} \; | jq -c --slurp 'map(to_entries | map(.key as $matrix_key | .value | map_values({($matrix_key): .}))) | flatten | reduce .[] as $item ({}; . * $item)' )"
+        echo "result=${result}" >> $GITHUB_OUTPUT
