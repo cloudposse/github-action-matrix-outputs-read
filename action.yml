@@ -16,7 +16,7 @@ runs:
   using: "composite"
   steps:
     - name: 'Setup jq'
-      uses: dcarbone/install-jq-action@v1.0.0
+      uses: dcarbone/install-jq-action@v1.0.1
       with:
         version: 1.6
         force: 'true'
