@@ -35,4 +35,4 @@ jobs:
             result: ${{ inputs.in }}
 
     outputs:
-      result: ${{ inputs.matrix-key }}
+      result: ${{ steps.writer.outputs.result }}
