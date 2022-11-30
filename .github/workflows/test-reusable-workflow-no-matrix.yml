@@ -9,7 +9,7 @@ on:
 
 jobs:
   setup:
-    uses: cloudposse/github-action-matrix-outputs-read/.github/workflows/setup-test.yml@init
+    uses: ./.github/workflows/setup-test.yml
     with:
       in: one
 

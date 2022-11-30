@@ -9,7 +9,7 @@ on:
 
 jobs:
   setup:
-    uses: cloudposse/github-action-matrix-outputs-read/.github/workflows/setup-test.yml@init
+    uses: ./.github/workflows/setup-test.yml
     strategy:
       matrix:
         target: ["one", "two"]
@@ -19,7 +19,7 @@ jobs:
       in: ${{ matrix.target }}
 
   setup2:
-    uses: cloudposse/github-action-matrix-outputs-read/.github/workflows/setup-test.yml@init
+    uses: ./.github/workflows/setup-test.yml
     strategy:
       matrix:
         target: ["three", "four"]
