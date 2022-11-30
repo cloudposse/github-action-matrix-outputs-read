@@ -1,4 +1,4 @@
-name: Test reusable workflow
+name: Test twice reusable workflow
 on:
 #  # Uncomment when test added first time to register workflow and comment it back after workflow would be registered
 #  #
@@ -31,7 +31,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [setup]
+    needs: [setup, setup2]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
