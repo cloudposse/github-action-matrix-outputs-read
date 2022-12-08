@@ -57,13 +57,6 @@ jobs:
     steps:
       - uses: nick-fields/assert-action@v1
         with:
-          expected: '{"result":{"one":"one","two":"two"}}'
-          ## We use toJson(fromJson()) pattern to sort json fields
-          actual: "${{ toJson(fromJson(needs.test.outputs.result1)) }}"
-
-
-      - uses: nick-fields/assert-action@v1
-        with:
           expected: 'one'
           actual: ${{ fromJson(needs.test.outputs.result1).result.one }}
 
@@ -71,13 +64,6 @@ jobs:
         with:
           expected: 'two'
           actual: ${{ fromJson(needs.test.outputs.result1).result.two }}
-
-      - uses: nick-fields/assert-action@v1
-        with:
-          expected: '{"result":{"three":"three","four":"four"}}'
-          ## We use toJson(fromJson()) pattern to sort json fields
-          actual: "${{ toJson(fromJson(needs.test.outputs.result2)) }}"
-
 
       - uses: nick-fields/assert-action@v1
         with:
