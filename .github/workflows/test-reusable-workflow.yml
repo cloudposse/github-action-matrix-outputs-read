@@ -40,11 +40,6 @@ jobs:
     steps:
       - uses: nick-fields/assert-action@v1
         with:
-          expected: '{"result":{"one":"one","two":"two"}}'
-          actual: "${{ needs.test.outputs.result }}"
-
-      - uses: nick-fields/assert-action@v1
-        with:
           expected: 'one'
           actual: ${{ fromJson(needs.test.outputs.result).result.one }}
 
