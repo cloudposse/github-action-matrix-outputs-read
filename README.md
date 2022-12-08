@@ -96,17 +96,19 @@ Feel free to use it as reference and starting point.
 
 
 <!-- markdownlint-disable -->
+
 ## Inputs
 
 | Name | Description | Default | Required |
 |------|-------------|---------|----------|
-| param1 | Input parameter placeholder | true | true |
+| matrix-step-name | Matrix step name | N/A | true |
+
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| result1 | Output result placeholder |
+| result | Outputs result |
 <!-- markdownlint-restore -->
 
 
