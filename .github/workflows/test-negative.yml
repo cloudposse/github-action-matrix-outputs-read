@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: cloudposse/github-action-matrix-outputs-write@0.3.0
+      - uses: cloudposse/github-action-matrix-outputs-write@0.4.2
         with:
           matrix-step-name: ${{ github.job }}
           matrix-key: ${{ matrix.target }}
