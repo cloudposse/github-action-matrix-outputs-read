@@ -18,7 +18,7 @@ jobs:
         run: echo "Do setup"
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: cloudposse/github-action-matrix-outputs-write@0.5.0
         with:
@@ -33,7 +33,7 @@ jobs:
     needs: [setup]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: ./
         id: current
