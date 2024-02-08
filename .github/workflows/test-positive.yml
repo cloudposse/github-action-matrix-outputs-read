@@ -47,12 +47,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test]
     steps:
-      - uses: nick-fields/assert-action@v1
+      - uses: nick-fields/assert-action@v2
         with:
           expected: 'one'
           actual: ${{ fromJson(needs.test.outputs.result).result.one }}
 
-      - uses: nick-fields/assert-action@v1
+      - uses: nick-fields/assert-action@v2
         with:
           expected: 'two'
           actual: ${{ fromJson(needs.test.outputs.result).result.two }}
