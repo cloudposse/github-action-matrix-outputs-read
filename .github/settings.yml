@@ -1,0 +1,7 @@
+# Upstream changes from _extends are only recognized when modifications are made to this file in the default branch.
+_extends: .github
+repository:
+  name: github-action-matrix-outputs-read
+  description: Workaround implementation - Read matrix jobs outputs
+  homepage: https://cloudposse.com/
+  topics: ""
