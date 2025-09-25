@@ -24,7 +24,7 @@ jobs:
         run: echo "Do setup"
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: cloudposse/github-action-matrix-outputs-write@v1
         id: writer
