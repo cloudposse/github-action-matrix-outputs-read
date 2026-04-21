@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test]
     steps:
-      - uses: nick-fields/assert-action@v2
+      - uses: nick-fields/assert-action@v3.0.0
         with:
           expected: '{}'
           actual: "${{ needs.test.outputs.result }}"
